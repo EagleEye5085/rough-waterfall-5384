@@ -1,0 +1,15 @@
+<h1><%= @customer.name %></h1>
+
+<h2>Shops at: <%= @customer.supermarket.name %></h2>
+
+<div id="customer-items-section">
+  <h3>Customer Items</h3>
+  <ul>
+  <% @customer.items.each do |item| %>
+    <li id="item-<%= item.id %>">
+      <%= "#{item.name}"%>
+    </li>
+  <% end %>
+  </ul>
+  <h3>Total price: <%= number_to_currency(@customer.total_items_price(@customer.id).to_f/100) %></h3>
+</div>

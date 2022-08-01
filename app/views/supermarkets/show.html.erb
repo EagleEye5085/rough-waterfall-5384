@@ -1,0 +1,15 @@
+<h1><%= @supermarket.name %></h1>
+
+<%= link_to 'Items list', "/supermarkets/#{@supermarket.id}/items" %>
+
+<h2> Top items</h2>
+<div id="top-3-items">
+  <ul>
+  <% @supermarket.top_items(@supermarket.id).each do |item| %>
+    <li id="item-<%= item.id %>">
+      <%= binding.pry %>
+      <%= "#{item.name}"%>
+    </li>
+  <% end %>
+  </ul>
+</div>

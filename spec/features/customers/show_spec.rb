@@ -1,13 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Customer, type: :model do
-  describe 'relationships' do
-    it { should belong_to(:supermarket) }
-    it { should have_many(:customer_items)}
-    it { should have_many(:items).through(:customer_items)}
-  end
+RSpec.describe 'customer show page' do
+  before :each do
 
-  it ' can give a total price for its items' do
     @supermarket_1 = Supermarket.create!(name: 'Wallmart', location: '123 beach st.')
 
     @customer_1 = @supermarket_1.customers.create!(name: "Chris")
@@ -23,6 +18,40 @@ RSpec.describe Customer, type: :model do
     @customer_item_3 = CustomerItem.create!(customer_id:   @customer_1.id, item_id: @item_3.id)
     @customer_item_4 = CustomerItem.create!(customer_id:   @customer_1.id, item_id: @item_4.id)
 
-    expect(@customer_1.total_items_price(@customer_1.id)).to eq(850)
+      visit "/customers/#{@customer_1.id}"
+
   end
+
+  it "shows a list of all customer items" do
+    # save_and_open_page
+    within '#customer-items-section' do
+      within "#item-#{@item_1.id}" do
+        expect(page).to have_content('soda')
+      end
+
+      within "#item-#{@item_2.id}" do
+        expect(page).to have_content('chips')
+      end
+
+      within "#item-#{@item_3.id}" do
+        expect(page).to have_content('cheese')
+      end
+
+      within "#item-#{@item_4.id}" do
+        expect(page).to have_content('milk')
+      end
+
+      expect(page).to_not have_content('beer')
+    end
+  end
+
+  it 'shows the customers supermarket' do
+    expect(page).to have_content('Wallmart')
+  end
+
+  it 'shows the total price of all items' do
+    # save_and_open_page
+    expect(page).to have_content('Total price: $8.50')
+  end
+
 end
